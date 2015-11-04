@@ -105,7 +105,7 @@ public class CSILevelEditor extends javax.swing.JFrame {
                     while(in.hasNextLine()){
                         mainText = mainText+"\n"+in.nextLine();
                     }
-                    List<String> numdata = new ArrayList<String>();
+                    List<String> numdata = new ArrayList<>();
                     mainText = mainText+"\n\tpublic void buildLevel(){";
                     for(int i = 0; i < jTable1.getModel().getRowCount(); i++){
                         for(int b = 0; b < jTable1.getModel().getColumnCount(); b++){
@@ -127,9 +127,9 @@ public class CSILevelEditor extends javax.swing.JFrame {
                     File create = new File(path);
                     try {
                         create.createNewFile();
-                        PrintWriter writer = new PrintWriter(path, "UTF8");
-                        writer.println(mainText);
-                        writer.close();
+                        try (PrintWriter writer = new PrintWriter(path, "UTF8")) {
+                            writer.println(mainText);
+                        }
                         ShowCode cod = new ShowCode(mainText);
                         cod.setVisible(true);
                     } catch (IOException ex) {
@@ -206,10 +206,6 @@ public class CSILevelEditor extends javax.swing.JFrame {
     }                     
 
     public static void main(String args[]) {
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -217,21 +213,12 @@ public class CSILevelEditor extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CSILevelEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CSILevelEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CSILevelEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(CSILevelEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CSILevelEditor().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new CSILevelEditor().setVisible(true);
         });
     }
                   
