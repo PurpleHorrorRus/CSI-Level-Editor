@@ -1,7 +1,9 @@
+package csileveleditor;
+
+import java.awt.HeadlessException;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
-import java.util.logging.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -69,10 +71,7 @@ public class CSILevelEditor extends JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 String mainText = "";
                 try {
-                    Scanner in = null;
-                    try {
-                        in = new Scanner(new URL("http://nikiforoff.tk/projects/main.txt").openStream());
-                    } catch (IOException ex) {}
+                    Scanner in = new Scanner(new URL("http://nikiforoff.tk/projects/main.txt").openStream());
                     while(in.hasNextLine()){
                         mainText += "\n"+in.nextLine();
                     }
@@ -102,7 +101,7 @@ public class CSILevelEditor extends JFrame {
                         } catch (FileNotFoundException | UnsupportedEncodingException ex) { }
                         ShowCode cod = new ShowCode(mainText);
                         cod.setVisible(true);
-                } catch(Exception e) { }
+                } catch(IOException | HeadlessException e) { }
             }
         });
         jScrollPane1.setViewportView(table);
