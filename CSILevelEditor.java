@@ -1,5 +1,7 @@
 import java.io.*;
+import java.net.URL;
 import java.util.*;
+import java.util.logging.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -10,7 +12,7 @@ public class CSILevelEditor extends JFrame {
     }                        
     private void initComponents() {
         
-        setTitle("Roguelike CSI Level Editor by Nikiforoff.tk (Version from 11/06/15)");
+        setTitle("Roguelike CSI Level Editor by Nikiforoff.tk (Version from 11/16/15)");
         setResizable(false);
         
         JScrollPane jScrollPane1 = new JScrollPane();
@@ -67,7 +69,10 @@ public class CSILevelEditor extends JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 String mainText = "";
                 try {
-                    Scanner in = new Scanner(new FileReader("main.txt"));
+                    Scanner in = null;
+                    try {
+                        in = new Scanner(new URL("http://nikiforoff.tk/projects/main.txt").openStream());
+                    } catch (IOException ex) {}
                     while(in.hasNextLine()){
                         mainText += "\n"+in.nextLine();
                     }
@@ -89,15 +94,15 @@ public class CSILevelEditor extends JFrame {
                     mainText = mainText.replace("private int x = 0, y = 0", "private int x = "+x+", y = "+y);
                     String path = "A.java";
                     File create = new File(path);
-                    try {
-                        create.createNewFile();
+                     try {
+                            create.createNewFile();
+                        } catch (IOException ex) { }
                         try (PrintWriter writer = new PrintWriter(path, "UTF8")) {
                             writer.println(mainText);
-                        }
+                        } catch (FileNotFoundException | UnsupportedEncodingException ex) { }
                         ShowCode cod = new ShowCode(mainText);
                         cod.setVisible(true);
-                    } catch (IOException ex) { }
-                } catch (FileNotFoundException ex) { }
+                } catch(Exception e) { }
             }
         });
         jScrollPane1.setViewportView(table);
@@ -170,9 +175,7 @@ public class CSILevelEditor extends JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CSILevelEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {}
 
         java.awt.EventQueue.invokeLater(() -> {
             new CSILevelEditor().setVisible(true);
