@@ -1,5 +1,3 @@
-package csileveleditor;
-
 import java.awt.HeadlessException;
 import java.io.*;
 import java.net.URL;
@@ -9,23 +7,29 @@ import javax.swing.table.DefaultTableModel;
 
 public class CSILevelEditor extends JFrame {
 
+	private String date = "15/02/16";
+	private JButton buildButton, helpButton;
+	private JLabel posLabel, startLabel;
+	private JTextField xField, yField;
+	private JTable table;
+	private JScrollPane scroll;
+	
     public CSILevelEditor() {
         initComponents();
     }                        
     private void initComponents() {
         
-        setTitle("Roguelike CSI Level Editor by Nikifor0ff.ru (Version from 02/15/16)");
+        setTitle("Roguelike CSI Level Editor by Nikifor0ff.ru (Version from "+date+")");
         setResizable(false);
         
-        JScrollPane jScrollPane1 = new JScrollPane();
-        JTable table = new JTable();
-        JButton buildButton = new JButton();
-        JButton helpButton = new JButton();
-        JLabel posLabel = new JLabel();
-        JLabel startLabel = new JLabel();
-        JTextField xField = new JTextField();
-        JTextField yField = new JTextField();.
-
+        scroll = new JScrollPane();
+        table = new JTable();
+        buildButton = new JButton();
+        helpButton = new JButton();
+        posLabel = new JLabel();
+        startLabel = new JLabel();
+        xField = new JTextField();
+        yField = new JTextField();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -48,20 +52,27 @@ public class CSILevelEditor extends JFrame {
                 }
             }
         });
-        jScrollPane1.setViewportView(table);
+        scroll.setViewportView(table);
         
         helpButton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
+            	String update = "";
+            	try{
+            		Scanner getUpdate = new Scanner(new URL("http://nikifor0ff.ru/files/projects/csileveleditor/update.txt").openStream());
+            		while(getUpdate.hasNextLine()) { update += getUpdate.nextLine()+"\n"; }
+            		getUpdate.close();
+            	}catch(Exception ex) { }
                JOptionPane.showMessageDialog(null, "Hi. Glad you're using my editor. "
                         + "\nIn short, about the editor: this editor for editing levels for the libjcsi library. "
                         + "\nSo that you can generate: "
                         + "\n0 - walls and the starting position for a player (yet). "
                         + "\nIf you specify a unit, the game will cease to work as it should. "
-                        + "\nThe ability to make their traps, barriers and so on will make later. "
-                        + "\nDONT DELETE 'main.txt' This file contains the bulk code of the game (character control, for example)"
+                        + "\nThe ability to make their traps, barriers and so on will make later."
                         + "\nWatch for updates on my website - http://nikifor0ff.ru section \"files\". "
-                        + "\nOn my github https://github.com/PurpleHorrorRus", "About", JOptionPane.INFORMATION_MESSAGE);
+                        + "\nOn my github https://github.com/PurpleHorrorRus"
+                        + "\n\nIn this version ("+date+"):"
+                        		+ "\n"+update, "About", JOptionPane.INFORMATION_MESSAGE);
                 
             }
         });
@@ -71,11 +82,10 @@ public class CSILevelEditor extends JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 String mainText = "";
                 try {
-                    Scanner in = new Scanner(new URL("http://nikifor0ff.ru/projects/main.txt").openStream());
+                    Scanner in = new Scanner(new URL("http://nikifor0ff.ru/files/projects/csileveleditor/main.txt").openStream());
                     while(in.hasNextLine()){
                         mainText += "\n"+in.nextLine();
                     }
-                    List<String> numdata = new ArrayList<>();
                     mainText += "\n\tpublic void buildLevel(){";
                     for(int i = 0; i < table.getModel().getRowCount(); i++){
                         for(int b = 0; b < table.getModel().getColumnCount(); b++){
@@ -96,15 +106,16 @@ public class CSILevelEditor extends JFrame {
                      try {
                             create.createNewFile();
                         } catch (IOException ex) { }
-                        try (PrintWriter writer = new PrintWriter(path, "UTF8")) {
+                        try (PrintWriter writer = new PrintWriter(path)) {
                             writer.println(mainText);
-                        } catch (FileNotFoundException | UnsupportedEncodingException ex) { }
+                        } catch (FileNotFoundException ex) { }
                         ShowCode cod = new ShowCode(mainText);
                         cod.setVisible(true);
+                        in.close();
                 } catch(IOException | HeadlessException e) { }
             }
         });
-        jScrollPane1.setViewportView(table);
+        scroll.setViewportView(table);
 
         buildButton.setText("Build");
         buildButton.setToolTipText("");
@@ -123,7 +134,7 @@ public class CSILevelEditor extends JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 1245, Short.MAX_VALUE)
+            .addComponent(scroll, GroupLayout.DEFAULT_SIZE, 1245, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -145,7 +156,7 @@ public class CSILevelEditor extends JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 296, GroupLayout.PREFERRED_SIZE)
+                .addComponent(scroll, GroupLayout.PREFERRED_SIZE, 296, GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
@@ -193,7 +204,7 @@ class ShowCode extends JFrame {
     private void initComponents() {
         setTitle("Source code");
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
         showCode.setColumns(20);
         showCode.setRows(5);
