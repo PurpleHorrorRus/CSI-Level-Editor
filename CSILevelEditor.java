@@ -24,7 +24,7 @@ public class CSILevelEditor extends JFrame {
         JLabel posLabel = new JLabel();
         JLabel startLabel = new JLabel();
         JTextField xField = new JTextField();
-        JTextField yField = new JTextField();
+        JTextField yField = new JTextField();.
 
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,7 +60,7 @@ public class CSILevelEditor extends JFrame {
                         + "\nIf you specify a unit, the game will cease to work as it should. "
                         + "\nThe ability to make their traps, barriers and so on will make later. "
                         + "\nDONT DELETE 'main.txt' This file contains the bulk code of the game (character control, for example)"
-                        + "\nWatch for updates on my website - http://nikiforoff.tk section \"files\". "
+                        + "\nWatch for updates on my website - http://nikifor0ff.ru section \"files\". "
                         + "\nOn my github https://github.com/PurpleHorrorRus", "About", JOptionPane.INFORMATION_MESSAGE);
                 
             }
