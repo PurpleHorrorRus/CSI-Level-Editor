@@ -14,7 +14,7 @@ public class CSILevelEditor extends JFrame {
     }                        
     private void initComponents() {
         
-        setTitle("Roguelike CSI Level Editor by Nikiforoff.tk (Version from 11/16/15)");
+        setTitle("Roguelike CSI Level Editor by Nikifor0ff.ru (Version from 02/15/16)");
         setResizable(false);
         
         JScrollPane jScrollPane1 = new JScrollPane();
@@ -71,7 +71,7 @@ public class CSILevelEditor extends JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 String mainText = "";
                 try {
-                    Scanner in = new Scanner(new URL("http://nikiforoff.tk/projects/main.txt").openStream());
+                    Scanner in = new Scanner(new URL("http://nikifor0ff.ru/projects/main.txt").openStream());
                     while(in.hasNextLine()){
                         mainText += "\n"+in.nextLine();
                     }
@@ -91,7 +91,7 @@ public class CSILevelEditor extends JFrame {
                     try{ x = Integer.parseInt(xField.getText()); y = Integer.parseInt(yField.getText()); if(x > 24 || y > 79) { JOptionPane.showMessageDialog(null, "X should not exceed 24, and Y should not exceed 79!", "Error", JOptionPane.ERROR_MESSAGE); } }
                     catch(NumberFormatException NFE) { JOptionPane.showMessageDialog(null, "In the X and Y need to enter the NUMBERS!", "Error", JOptionPane.ERROR_MESSAGE); }
                     mainText = mainText.replace("private int x = 0, y = 0", "private int x = "+x+", y = "+y);
-                    String path = "A.java";
+                    String path = "CSILevel.java";
                     File create = new File(path);
                      try {
                             create.createNewFile();
